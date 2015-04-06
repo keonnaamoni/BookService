@@ -29,5 +29,7 @@ namespace BookService.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<BookService.Models.Author> Authors { get; set; }
     }
 }
