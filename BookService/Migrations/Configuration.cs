@@ -1,20 +1,20 @@
-using System;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using BookService.Models;
 
 
 namespace BookService.Migrations
 {
-   
-    internal sealed class Configuration : DbMigrationsConfiguration<BookService.Models.ApplicationDbContext>
-    
-        {
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
+    using BookService.Models;
+
+    internal sealed class Configuration : DbMigrationsConfiguration<BookService.Models.BookServiceContext>
+    {
         public Configuration()
         {
-          AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = false;
         }
+
         protected override void Seed(BookService.Models.BookServiceContext context)
         {
             context.Authors.AddOrUpdate(x => x.Id,
@@ -31,7 +31,7 @@ namespace BookService.Migrations
                     Year = 1813,
                     AuthorId = 1,
                     Price = 9.99M,
-                    Genre = "Comedy of manners"
+                    Genre = "Commedy of manners"
                 },
                 new Book()
                 {
@@ -59,9 +59,7 @@ namespace BookService.Migrations
                     AuthorId = 3,
                     Price = 8.95M,
                     Genre = "Picaresque"
-                }
-                );
+                });
         }
     }
-
 }

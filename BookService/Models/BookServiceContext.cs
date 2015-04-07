@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
+
 namespace BookService.Models
 {
     public class BookServiceContext : DbContext
@@ -20,6 +21,8 @@ namespace BookService.Models
         }
 
         public System.Data.Entity.DbSet<BookService.Models.Author> Authors { get; set; }
+
+        public System.Data.Entity.DbSet<BookService.Models.Book> Books { get; set; }
     
     }
 }

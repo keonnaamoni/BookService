@@ -6,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using BookService.Models;
@@ -14,7 +15,7 @@ namespace BookService.Controllers
 {
     public class BooksController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private BookServiceContext db = new BookServiceContext();
 
         // GET: api/Books
         public IQueryable<Book> GetBooks()
@@ -24,9 +25,9 @@ namespace BookService.Controllers
 
         // GET: api/Books/5
         [ResponseType(typeof(Book))]
-        public IHttpActionResult GetBook(int id)
+        public async Task<IHttpActionResult> GetBook(int id)
         {
-            Book book = db.Books.Find(id);
+            Book book = await db.Books.FindAsync(id);
             if (book == null)
             {
                 return NotFound();
@@ -37,7 +38,7 @@ namespace BookService.Controllers
 
         // PUT: api/Books/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutBook(int id, Book book)
+        public async Task<IHttpActionResult> PutBook(int id, Book book)
         {
             if (!ModelState.IsValid)
             {
@@ -53,7 +54,7 @@ namespace BookService.Controllers
 
             try
             {
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -72,7 +73,7 @@ namespace BookService.Controllers
 
         // POST: api/Books
         [ResponseType(typeof(Book))]
-        public IHttpActionResult PostBook(Book book)
+        public async Task<IHttpActionResult> PostBook(Book book)
         {
             if (!ModelState.IsValid)
             {
@@ -80,23 +81,23 @@ namespace BookService.Controllers
             }
 
             db.Books.Add(book);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi", new { id = book.Id }, book);
         }
 
         // DELETE: api/Books/5
         [ResponseType(typeof(Book))]
-        public IHttpActionResult DeleteBook(int id)
+        public async Task<IHttpActionResult> DeleteBook(int id)
         {
-            Book book = db.Books.Find(id);
+            Book book = await db.Books.FindAsync(id);
             if (book == null)
             {
                 return NotFound();
             }
 
             db.Books.Remove(book);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
 
             return Ok(book);
         }
