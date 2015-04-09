@@ -33,28 +33,26 @@ namespace BookService.Controllers
 
         // GET api/Books/5
         [ResponseType(typeof(BookDetailDTO))]
-        public async Task<IHttpActionResult> PostBook(Book book)
+        public async Task<IHttpActionResult> GetBook(int id)
         {
-            if (!ModelState.IsValid)
+            var book = await db.Books.Include(b => b.Author).Select(b =>
+                new BookDetailDTO()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Year = b.Year,
+                    Price = b.Price,
+                    AuthorName = b.Author.Name,
+                    Genre = b.Genre
+                }).SingleOrDefaultAsync(b => b.Id == id);
+
+            if (book == null) 
             {
-                return BadRequest(ModelState);
+                return NotFound();
             }
 
-            db.Books.Add(book);
-            await db.SaveChangesAsync();
+            return Ok(book);
 
-            // New code:
-            // Load author name
-            db.Entry(book).Reference(x => x.Author).Load();
-
-            var dto = new BookDTO()
-            {
-                Id = book.Id,
-                Title = book.Title,
-                AuthorName = book.Author.Name
-            };
-
-            return CreatedAtRoute("DefaultApi", new { id = book.Id }, dto);
         }
     }
 }
@@ -161,3 +159,26 @@ namespace BookService.Controllers
 //        }
 //    }
 //}
+
+
+
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
+            //db.Books.Add(book);
+            //await db.SaveChangesAsync();
+
+            //// New code:
+            //// Load author name
+            //db.Entry(book).Reference(x => x.Author).Load();
+
+            //var dto = new BookDTO()
+            //{
+            //    Id = book.Id,
+            //    Title = book.Title,
+            //    AuthorName = book.Author.Name
+            //};
+
+            //return CreatedAtRoute("DefaultApi", new { id = book.Id }, dto);
